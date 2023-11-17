@@ -24,12 +24,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const readlineSync = __importStar(require("readline-sync"));
-const user_1 = require("./user");
 const library_1 = require("./library");
 function bookManagementSystem() {
     const library = new library_1.Library();
-    const user = new user_1.User();
-    while (true) {
+    function showMenu() {
         console.log("\nBook Management System");
         console.log("1. Add a Book");
         console.log("2. List Available Books");
@@ -38,32 +36,35 @@ function bookManagementSystem() {
         console.log("5. Return a Book");
         console.log("6. Remove a Book");
         console.log("0. Exit");
+    }
+    while (true) {
+        showMenu();
         const choice = readlineSync.question("Enter your choice: ");
-        switch (choice) {
-            case '1':
-                library.addBook();
-                break;
-            case '2':
-                library.listAvailableBooks();
-                break;
-            case '3':
-                const searchBook = readlineSync.question("Search for Book: ");
-                library.searchBooks(searchBook);
-                break;
-            case '4':
-                library.checkOutBook();
-                break;
-            case '5':
-                library.returnBook();
-                break;
-            case '6':
-                library.removeBook();
-                break;
-            case '0':
-                console.log("Exiting the Book Management System.");
-                process.exit(0);
-            default:
-                console.log("Invalid choice. Please enter a valid option.");
+        if (choice === '1') {
+            library.addBook();
+        }
+        else if (choice === '2') {
+            library.listAvailableBooks();
+        }
+        else if (choice === '3') {
+            const searchBook = readlineSync.question("Search for Book(Either by title or author name): ");
+            library.searchBooks(searchBook);
+        }
+        else if (choice === '4') {
+            library.checkOutBook();
+        }
+        else if (choice === '5') {
+            library.returnBook();
+        }
+        else if (choice === '6') {
+            library.removeBook();
+        }
+        else if (choice === '0') {
+            console.log("Exiting the Book Management System.");
+            process.exit(0);
+        }
+        else {
+            console.log("Invalid choice. Please enter a valid option.");
         }
     }
 }

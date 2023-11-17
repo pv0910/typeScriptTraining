@@ -1,30 +1,25 @@
 import { Book } from './book';
 
 export class User {
-  private _checkedOutBooks: Book[] = [];
+  checkedOutBooks: Book[] = [];
 
-  get checkedOutBooks(): Book[] {
-    return this._checkedOutBooks;
+  public canCheckOutMoreBooks(): boolean {
+    return this.checkedOutBooks.length < 3;
   }
 
-  canCheckOutMoreBooks(): boolean {
-    return this._checkedOutBooks.length < 3;
-  }
-
-  checkOutBook(book: Book): void {
+  public checkOutBook(book: Book): void {
     if (this.canCheckOutMoreBooks()) {
-      this._checkedOutBooks.push(book);
+      this.checkedOutBooks.push(book);
       book.checkout();
-      console.log(`Book "${book.title}" checked out successfully.`);
     } else {
       console.log("You have reached the maximum checkout limit. Return some books to check out more.");
     }
   }
 
   returnBook(book: Book): void {
-    const index = this._checkedOutBooks.indexOf(book);
+    const index = this.checkedOutBooks.indexOf(book);
     if (index !== -1) {
-      this._checkedOutBooks.splice(index, 1);
+      this.checkedOutBooks.splice(index, 1);
       book.returnBook();
       console.log(`Book "${book.title}" returned successfully.`);
     } else {
@@ -32,4 +27,3 @@ export class User {
     }
   }
 }
-
