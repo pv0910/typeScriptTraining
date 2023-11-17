@@ -34,7 +34,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const readline = __importStar(require("readline"));
 const bank_1 = require("./bank");
-const account_1 = require("./account");
+const savingsAccount_1 = require("./savingsAccount");
+const currentAccount_1 = require("./currentAccount");
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -44,28 +45,35 @@ function displayMenu() {
     console.log('1. Create New Account');
     console.log('2. View Balance');
     console.log('3. Display Account Details');
-    console.log('4. Exit from Application');
+    console.log('4. Withdraw Money');
+    console.log('5. Deposit Money');
+    console.log('6. Exit from Application');
     rl.question('Please select an option (1-4): ', (choice) => {
         handleUserChoice(choice);
     });
 }
 function handleUserChoice(choice) {
-    switch (choice) {
-        case '1':
-            openAccount();
-            break;
-        case '2':
-            viewBalance();
-            break;
-        case '3':
-            viewAccountDetails();
-            break;
-        case '4':
-            console.log('Exiting application');
-            rl.close();
-            break;
-        default:
-            console.log('Invalid choice. Please select a valid option (1-4).');
+    if (choice === '1') {
+        openAccount();
+    }
+    else if (choice === '2') {
+        viewBalance();
+    }
+    else if (choice === '3') {
+        viewAccountDetails();
+    }
+    else if (choice === '4') {
+        withdrawMoney();
+    }
+    else if (choice === '5') {
+        depositMoney();
+    }
+    else if (choice === '6') {
+        console.log('Exiting application');
+        rl.close();
+    }
+    else {
+        console.log('Invalid choice. Please select a valid option (1-4).');
     }
 }
 function openAccount() {
@@ -74,10 +82,10 @@ function openAccount() {
         console.log('2. Current');
         const option = parseInt(yield getUserInput('Select 1 or 2: '));
         if (option === 1) {
-            createAccount('Savings', account_1.SavingsAccount.getMinimumBalance());
+            createAccount('Savings', 500);
         }
         else if (option === 2) {
-            createAccount('Current', account_1.CurrentAccount.getMinimumBalance());
+            createAccount('Current', 1000);
         }
         else {
             console.log('Invalid option. Please select 1 or 2.');
@@ -120,8 +128,8 @@ function createAccount(accountType, minimumBalance) {
         };
         const accountNumber = `${accountType === 'Savings' ? 'Sav' : 'Curr'}${Math.floor(Math.random() * 10000)}`;
         const account = accountType === 'Savings'
-            ? new account_1.SavingsAccount(accountNumber, customer, initialBalance)
-            : new account_1.CurrentAccount(accountNumber, customer, initialBalance);
+            ? new savingsAccount_1.SavingsAccount(accountNumber, customer, initialBalance)
+            : new currentAccount_1.CurrentAccount(accountNumber, customer, initialBalance);
         console.log(`${accountType} Account Created Successfully!`);
         console.log('Account Details');
         console.log(`Customer Name: ${customerName}`);
@@ -129,10 +137,13 @@ function createAccount(accountType, minimumBalance) {
         console.log(`Account Type: ${accountType}`);
         console.log(`Total Balance: ${initialBalance}`);
         console.log(`Generated account number for ${accountType} account: ${accountNumber}`);
+        bank.addAccount(account);
+        displayMenu();
     });
 }
 function viewBalance() {
     rl.question('Enter Account Number : ', (accountNumber) => {
+        accountNumber = accountNumber.toLowerCase();
         bank.showBalance(accountNumber);
         displayMenu();
     });
@@ -141,6 +152,38 @@ function viewAccountDetails() {
     rl.question('Enter Account number: ', (accountNumber) => {
         bank.displayAccountDetails(accountNumber);
         displayMenu();
+    });
+}
+function withdrawMoney() {
+    rl.question('Enter Account Number: ', (accountNumber) => {
+        rl.question('Enter Withdrawal Amount: ', (amountInput) => {
+            const amount = parseFloat(amountInput);
+            const account = bank.findAccountByNumber(accountNumber);
+            if (account) {
+                account.withdraw(amount);
+                console.log('Withdrawal completed successfully.');
+            }
+            else {
+                console.log('Account not found.');
+            }
+            displayMenu();
+        });
+    });
+}
+function depositMoney() {
+    rl.question('Enter Account Number: ', (accountNumber) => {
+        rl.question('Enter Deposit Amount: ', (amountInput) => {
+            const amount = parseFloat(amountInput);
+            const account = bank.findAccountByNumber(accountNumber);
+            if (account) {
+                account.deposit(amount);
+                console.log('Deposit completed successfully.');
+            }
+            else {
+                console.log('Account not found.');
+            }
+            displayMenu();
+        });
     });
 }
 function isValidEmail(email) {
