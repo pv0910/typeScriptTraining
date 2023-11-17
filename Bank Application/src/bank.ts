@@ -1,9 +1,10 @@
-import { Account, SavingsAccount, CurrentAccount, Customer } from './account';
+import { Account} from './account';
+import { SavingsAccount } from './savingsAccount';
 
 export class Bank {
-  accounts: Account[] = [];
+ accounts: Account[] = [];
   
-  showBalance(accountNumber: string) {
+  public showBalance(accountNumber: string) :void {
     const account = this.findAccountByNumber(accountNumber);
     if (account) {
       account.getBalance();
@@ -12,7 +13,7 @@ export class Bank {
     }
   }
 
-  displayAccountDetails(accountNumber: string) {
+  public displayAccountDetails(accountNumber: string):void {
     const account = this.findAccountByNumber(accountNumber);
     if (account) {
       console.log('Customer Name:', account.customer.name);
@@ -25,7 +26,12 @@ export class Bank {
   }
 
 
-  private findAccountByNumber(accountNumber: string): Account | undefined {
-    return this.accounts.find(account => account.accountNumber === accountNumber);
+  public findAccountByNumber(accountNumber: string): Account | undefined {
+    accountNumber = accountNumber.toLowerCase();  
+    return this.accounts.find(account => account.accountNumber.toLowerCase() === accountNumber);
+  }
+
+  public addAccount(account: Account): void {
+    this.accounts.push(account);
   }
 }

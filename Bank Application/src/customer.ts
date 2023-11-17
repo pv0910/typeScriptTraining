@@ -1,4 +1,4 @@
-export interface Customer {
+export interface ICustomer {
     name: string;
     age: number;
     location: string;
