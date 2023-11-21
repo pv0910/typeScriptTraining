@@ -1,3 +1,16 @@
+"use strict";
+// interface UserData {id: number;avatar: string;first_name: string;last_name: string;email: string;}
+// document.addEventListener("DOMContentLoaded", async () => {
+//     const userListElement = document.getElementById("userList");
+//     if (!userListElement) {
+//       console.error("User list element not found");
+//       return;
+//     }
+//     try {
+//       const response = await fetch('https://reqres.in/api/users');
+//       if (!response.ok) {
+//         throw new Error(`HTTP error! Status: ${response.status}`);
+//       }
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,74 +47,122 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
-document.addEventListener("DOMContentLoaded", function () { return __awaiter(_this, void 0, void 0, function () {
-    var userListElement, response, data, users, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                userListElement = document.getElementById("userList");
-                if (!userListElement) {
-                    console.error("User list element not found");
-                    return [2 /*return*/];
-                }
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 4, , 5]);
-                return [4 /*yield*/, fetch('https://reqres.in/api/users')];
-            case 2:
-                response = _a.sent();
-                if (!response.ok) {
-                    throw new Error("HTTP error! Status: ".concat(response.status));
-                }
-                return [4 /*yield*/, response.json()];
-            case 3:
-                data = _a.sent();
-                users = data.data;
-                users.forEach(function (user) {
-                    var userCard = createUserCard(user);
-                    userListElement.appendChild(userCard);
-                });
-                return [3 /*break*/, 5];
-            case 4:
-                error_1 = _a.sent();
-                console.error('Error fetching and rendering users:', error_1);
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
+var UserManager = /** @class */ (function () {
+    function UserManager() {
+        this.userListElement = document.getElementById("userList");
+        if (!this.userListElement) {
+            console.error("User list element not found");
+            return;
         }
-    });
-}); });
-function showUserDetails(userId) {
-    return __awaiter(this, void 0, void 0, function () {
-        var response, data, user, error_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 3, , 4]);
-                    return [4 /*yield*/, fetch("https://reqres.in/api/users/".concat(userId))];
-                case 1:
-                    response = _a.sent();
-                    if (!response.ok) {
-                        throw new Error("HTTP error! Status: ".concat(response.status));
-                    }
-                    return [4 /*yield*/, response.json()];
-                case 2:
-                    data = _a.sent();
-                    user = data.data;
-                    alert("User Details:\nID: ".concat(user.id, "\nFirst Name: ").concat(user.first_name, "\nLast Name: ").concat(user.last_name, "\nEmail: ").concat(user.email));
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_2 = _a.sent();
-                    console.error('Error fetching user details:', error_2);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
+    }
+    UserManager.prototype.initialize = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var users, error_1;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.fetchUsers()];
+                    case 1:
+                        users = _a.sent();
+                        users.forEach(function (user) {
+                            var userCard = _this.createUserCard(user);
+                            _this.userListElement.appendChild(userCard);
+                        });
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_1 = _a.sent();
+                        console.error('Error fetching and rendering users:', error_1);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
         });
-    });
-}
-function createUserCard(user) {
-    var userCard = document.createElement("div");
-    userCard.className = "user-card";
-    userCard.innerHTML = "\n      <img src=\"".concat(user.avatar, "\" alt=\"User Image\" onclick=\"showUserDetails(").concat(user.id, ")\">\n      <p>").concat(user.first_name, " ").concat(user.last_name, "</p>\n      <p>").concat(user.email, "</p>\n    ");
-    return userCard;
-}
+    };
+    UserManager.prototype.fetchUsers = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var response, data, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, fetch('https://reqres.in/api/users')];
+                    case 1:
+                        response = _a.sent();
+                        if (!response.ok) {
+                            throw new Error("HTTP error! Status: ".concat(response.status));
+                        }
+                        return [4 /*yield*/, response.json()];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, data.data];
+                    case 3:
+                        error_2 = _a.sent();
+                        console.error('Error fetching users:', error_2);
+                        throw error_2;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    UserManager.prototype.showUserDetails = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user, error_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.fetchUserDetails(userId)];
+                    case 1:
+                        user = _a.sent();
+                        this.displayUserDetails(user);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_3 = _a.sent();
+                        console.error('Error fetching user details:', error_3);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    UserManager.prototype.fetchUserDetails = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var response, data, error_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, fetch("https://reqres.in/api/users/".concat(userId))];
+                    case 1:
+                        response = _a.sent();
+                        if (!response.ok) {
+                            throw new Error("HTTP error! Status: ".concat(response.status));
+                        }
+                        return [4 /*yield*/, response.json()];
+                    case 2:
+                        data = _a.sent();
+                        return [2 /*return*/, data.data];
+                    case 3:
+                        error_4 = _a.sent();
+                        console.error('Error fetching user details:', error_4);
+                        throw error_4;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    UserManager.prototype.displayUserDetails = function (user) {
+        alert("User Details:\nID: ".concat(user.id, "\nFirst Name: ").concat(user.first_name, "\nLast Name: ").concat(user.last_name, "\nEmail: ").concat(user.email));
+    };
+    UserManager.prototype.createUserCard = function (user) {
+        var userCard = document.createElement("div");
+        userCard.className = "user-card";
+        userCard.innerHTML = "\n      <img src=\"".concat(user.avatar, "\" alt=\"User Image\" onclick=\"userManager.showUserDetails(").concat(user.id, ")\">\n      <p>").concat(user.first_name, " ").concat(user.last_name, "</p>\n      <p>").concat(user.email, "</p>\n    ");
+        return userCard;
+    };
+    return UserManager;
+}());
+var userManager = new UserManager();
+document.addEventListener("DOMContentLoaded", function () { return userManager.initialize(); });
